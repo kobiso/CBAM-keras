@@ -54,12 +54,12 @@ To change *reduction ratio*, you can set `ratio` on `se_block` and `cbam_block` 
 You can simply train a model with `main.py`.
 
 1. Set a model you want to train.
-  - e.g. `model = resnet_v1.resnet_v1(input_shape=input_shape, depth=depth, attention_module=attention_module)`  
+    - e.g. `model = resnet_v1.resnet_v1(input_shape=input_shape, depth=depth, attention_module=attention_module)`  
 2. Set attention_module parameter
-  - e.g. `attention_module = 'cbam_block'`
+    - e.g. `attention_module = 'cbam_block'`
 3. Set other parameter such as *batch_size*, *epochs*, *data_augmentation* and so on.
 4. Run the `main.py` file
-  - e.g. `python main.py`
+    - e.g. `python main.py`
 
 ## Related Works
 - Repository: [CBAM-TensorFlow](https://github.com/kobiso/CBAM-tensorflow)
