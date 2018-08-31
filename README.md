@@ -62,6 +62,7 @@ You can simply train a model with `main.py`.
     - e.g. `python main.py`
 
 ## Related Works
+- Blog: [CBAM: Convolutional Block Attention Module](https://kobiso.github.io//research/research-CBAM/)
 - Repository: [CBAM-TensorFlow](https://github.com/kobiso/CBAM-tensorflow)
 - Repository: [CBAM-TensorFlow-Slim](https://github.com/kobiso/CBAM-tensorflow-slim)
 - Repository: [SENet-TensorFlow-Slim](https://github.com/kobiso/SENet-tensorflow-slim)
