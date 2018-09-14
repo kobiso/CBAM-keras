@@ -36,7 +36,7 @@ from keras import backend as K
 from keras.applications.imagenet_utils import decode_predictions
 from keras.applications.imagenet_utils import _obtain_input_shape
 
-from models.attention_module import se_block, cbam_block
+from models.attention_module import attach_attention_module
 
 WEIGHTS_PATH = ''
 WEIGHTS_PATH_NO_TOP = ''
@@ -188,10 +188,8 @@ def InceptionV3(include_top=True,
         name='mixed0')
 
     # attention_module
-    if attention_module == 'se_block':
-        x = se_block(x)
-    if attention_module == 'cbam_block':
-        x = cbam_block(x)
+    if attention_module is not None:
+        x = attach_attention_module(x, attention_module)
 
     # mixed 1: 35 x 35 x 256
     branch1x1 = _conv2d_bn(x, 64, 1, 1)
@@ -211,10 +209,8 @@ def InceptionV3(include_top=True,
         name='mixed1')
 
     # attention_module
-    if attention_module == 'se_block':
-        x = se_block(x)
-    if attention_module == 'cbam_block':
-        x = cbam_block(x)
+    if attention_module is not None:
+        x = attach_attention_module(x, attention_module)
 
     # mixed 2: 35 x 35 x 256
     branch1x1 = _conv2d_bn(x, 64, 1, 1)
@@ -234,10 +230,8 @@ def InceptionV3(include_top=True,
         name='mixed2')
 
     # attention_module
-    if attention_module == 'se_block':
-        x = se_block(x)
-    if attention_module == 'cbam_block':
-        x = cbam_block(x)
+    if attention_module is not None:
+        x = attach_attention_module(x, attention_module)
 
     # mixed 3: 17 x 17 x 768
     branch3x3 = _conv2d_bn(x, 384, 3, 3, strides=(2, 2), padding='valid')
@@ -252,10 +246,8 @@ def InceptionV3(include_top=True,
         [branch3x3, branch3x3dbl, branch_pool], axis=channel_axis, name='mixed3')
 
     # attention_module
-    if attention_module == 'se_block':
-        x = se_block(x)
-    if attention_module == 'cbam_block':
-        x = cbam_block(x)
+    if attention_module is not None:
+        x = attach_attention_module(x, attention_module)
 
     # mixed 4: 17 x 17 x 768
     branch1x1 = _conv2d_bn(x, 192, 1, 1)
@@ -278,10 +270,8 @@ def InceptionV3(include_top=True,
         name='mixed4')
 
     # attention_module
-    if attention_module == 'se_block':
-        x = se_block(x)
-    if attention_module == 'cbam_block':
-        x = cbam_block(x)
+    if attention_module is not None:
+        x = attach_attention_module(x, attention_module)
 
     # mixed 5, 6: 17 x 17 x 768
     for i in range(2):
@@ -306,10 +296,8 @@ def InceptionV3(include_top=True,
             name='mixed' + str(5 + i))
 
         # attention_module
-        if attention_module == 'se_block':
-            x = se_block(x)
-        if attention_module == 'cbam_block':
-            x = cbam_block(x)
+        if attention_module is not None:
+            x = attach_attention_module(x, attention_module)
 
     # mixed 7: 17 x 17 x 768
     branch1x1 = _conv2d_bn(x, 192, 1, 1)
@@ -332,10 +320,8 @@ def InceptionV3(include_top=True,
         name='mixed7')
 
     # attention_module
-    if attention_module == 'se_block':
-        x = se_block(x)
-    if attention_module == 'cbam_block':
-        x = cbam_block(x)
+    if attention_module is not None:
+        x = attach_attention_module(x, attention_module)
 
     # mixed 8: 8 x 8 x 1280
     branch3x3 = _conv2d_bn(x, 192, 1, 1)
@@ -353,10 +339,8 @@ def InceptionV3(include_top=True,
         [branch3x3, branch7x7x3, branch_pool], axis=channel_axis, name='mixed8')
 
     # attention_module
-    if attention_module == 'se_block':
-        x = se_block(x)
-    if attention_module == 'cbam_block':
-        x = cbam_block(x)
+    if attention_module is not None:
+        x = attach_attention_module(x, attention_module)
 
     # mixed 9: 8 x 8 x 2048
     for i in range(2):
@@ -384,10 +368,8 @@ def InceptionV3(include_top=True,
             name='mixed' + str(9 + i))
 
         # attention_module
-        if attention_module == 'se_block':
-            x = se_block(x)
-        if attention_module == 'cbam_block':
-            x = cbam_block(x)
+        if attention_module is not None:
+            x = attach_attention_module(x, attention_module)
 
     if include_top:
         # Classification block

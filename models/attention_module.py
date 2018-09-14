@@ -2,6 +2,15 @@ from keras.layers import GlobalAveragePooling2D, GlobalMaxPooling2D, Reshape, De
 from keras import backend as K
 from keras.activations import sigmoid
 
+def attach_attention_module(net, attention_module):
+  if attention_module == 'se_block': # SE_block
+    net = se_block(net)
+  elif attention_module == 'cbam_block': # CBAM_block
+    net = cbam_block(net)
+  else:
+    raise Exception("'{}' is not supported attention module!".format(attention_module))
+
+  return net
 
 def se_block(input_feature, ratio=8):
 	"""Contains the implementation of Squeeze-and-Excitation(SE) block.

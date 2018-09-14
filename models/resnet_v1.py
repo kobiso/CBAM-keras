@@ -17,7 +17,7 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.regularizers import l2
 from keras import backend as K
 from keras.models import Model
-from models.attention_module import se_block, cbam_block
+from models.attention_module import attach_attention_module
 
 def resnet_layer(inputs,
                  num_filters=16,
@@ -121,10 +121,9 @@ def resnet_v1(input_shape, depth, num_classes=10, attention_module=None):
                                  strides=strides,
                                  activation=None,
                                  batch_normalization=False)
-            if attention_module == 'se_block':
-                y = se_block(y)
-            if attention_module == 'cbam_block':
-                y = cbam_block(y)
+            # attention_module
+            if attention_module is not None:
+                y = attach_attention_module(y, attention_module)
             x = keras.layers.add([x, y])
             x = Activation('relu')(x)
         num_filters *= 2

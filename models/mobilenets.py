@@ -32,7 +32,7 @@ from keras.applications.imagenet_utils import _obtain_input_shape
 from keras.applications.imagenet_utils import decode_predictions
 from keras import backend as K
 
-from models.attention_module import se_block, cbam_block
+from models.attention_module import attach_attention_module
 
 
 def relu6(x):
@@ -538,9 +538,8 @@ def _depthwise_conv_block(inputs, pointwise_conv_filters, alpha,
     x = BatchNormalization(axis=channel_axis, name='conv_pw_%d_bn' % block_id)(x)
     x = Activation(relu6, name='conv_pw_%d_relu' % block_id)(x)
 
-    if attention_module == 'se_block':
-        x = se_block(x)
-    if attention_module == 'cbam_block':
-        x = cbam_block(x)
+    # attention_module
+    if attention_module is not None:
+        x = attach_attention_module(x, attention_module)
 		
     return x

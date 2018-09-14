@@ -27,7 +27,7 @@ from keras.applications.imagenet_utils import _obtain_input_shape
 from keras.applications.imagenet_utils import decode_predictions
 import keras.backend as K
 
-from models.attention_module import se_block, cbam_block
+from models.attention_module import attach_attention_module
 
 
 def preprocess_input(x, data_format=None):
@@ -323,11 +323,9 @@ def __dense_block(x, nb_layers, nb_filter, growth_rate, bottleneck=False, dropou
         if grow_nb_filters:
             nb_filter += growth_rate
 
-	# attention_module
-    if attention_module == 'se_block':
-        x = se_block(x)
-    if attention_module == 'cbam_block':
-        x = cbam_block(x)
+    # attention_module
+    if attention_module is not None:
+        x = attach_attention_module(x, attention_module)
 
     if return_concat_list:
         return x, nb_filter, x_list
@@ -354,11 +352,9 @@ def __transition_block(ip, nb_filter, compression=1.0, weight_decay=1e-4, attent
                kernel_regularizer=l2(weight_decay))(x)
     x = AveragePooling2D((2, 2), strides=(2, 2))(x)
 
-	# attention_module
-    if attention_module == 'se_block':
-        x = se_block(x)
-    if attention_module == 'cbam_block':
-        x = cbam_block(x)
+    # attention_module
+    if attention_module is not None:
+        x = attach_attention_module(x, attention_module)
 
     return x
 

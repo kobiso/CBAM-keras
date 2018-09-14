@@ -40,7 +40,7 @@ from keras.applications.imagenet_utils import _obtain_input_shape
 from keras.applications.imagenet_utils import decode_predictions
 from keras import backend as K
 
-from models.attention_module import se_block, cbam_block
+from models.attention_module import attach_attention_module
 
 
 def preprocess_input(x):
@@ -155,6 +155,10 @@ def inception_resnet_block(x, scale, block_type, block_idx, activation='relu', a
                    activation=None,
                    use_bias=True,
                    name=block_name + '_conv')
+    
+    # attention_module
+    if attention_module is not None:
+        up = attach_attention_module(up, attention_module)
 
     x = Lambda(lambda inputs, scale: inputs[0] + inputs[1] * scale,
                output_shape=K.int_shape(x)[1:],
@@ -162,12 +166,7 @@ def inception_resnet_block(x, scale, block_type, block_idx, activation='relu', a
                name=block_name)([x, up])
     if activation is not None:
         x = Activation(activation, name=block_name + '_ac')(x)
-
-    # attention_module
-    if attention_module == 'se_block':
-        x = se_block(x)
-    if attention_module == 'cbam_block':
-        x = cbam_block(x)
+        
     return x
 
 

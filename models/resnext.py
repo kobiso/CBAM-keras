@@ -25,7 +25,7 @@ from keras.engine.topology import get_source_inputs
 from keras.applications.imagenet_utils import _obtain_input_shape
 import keras.backend as K
 
-from models.attention_module import se_block, cbam_block
+from models.attention_module import attach_attention_module
 
 CIFAR_TH_WEIGHTS_PATH = ''
 CIFAR_TF_WEIGHTS_PATH = ''
@@ -352,10 +352,9 @@ def __bottleneck_block(input, filters=64, cardinality=8, strides=1, weight_decay
                kernel_regularizer=l2(weight_decay))(x)
     x = BatchNormalization(axis=channel_axis)(x)
 
-    if attention_module == 'se_block':
-        x = se_block(x)
-    if attention_module == 'cbam_block':
-        x = cbam_block(x)
+    # attention_module
+    if attention_module is not None:
+        x = attach_attention_module(x, attention_module)
 
     x = add([init, x])
     x = LeakyReLU()(x)
